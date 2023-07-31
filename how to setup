@@ -1,0 +1,5 @@
+./gradlew clean
+./gradlew build
+docker network create movie-network
+docker build -t movie-based:0.0.1 .
+docker compose up -d

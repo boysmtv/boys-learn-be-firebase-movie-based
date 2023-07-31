@@ -1,0 +1,47 @@
+version: '3.5'
+
+services:
+  movie-based:
+    container_name: "movie-based"
+    image: movie-based:0.0.1
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_URL: jdbc:postgresql://movie-postgres:5432/movie
+      DATABASE_PASSWORD: movie
+      DATABASE_USERNAME: movie
+    depends_on:
+      - movie-postgres
+  movie-postgres:
+    container_name: "movie-postgres"
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: movie
+      POSTGRES_USER: movie
+      POSTGRES_DB: movie
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  movie-pgadmin:
+    container_name: "movie-pgadmin"
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - movie-postgres
+
+networks:
+  default:
+    name: movie-network
+    external: true
+
+volumes:
+  postgres-data:
+  pgadmin-data:
