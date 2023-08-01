@@ -35,7 +35,7 @@ class MovieController(val services: MovieServices) {
         )
     }
 
-    @GetMapping(
+    @PostMapping(
             value = ["/api/movie/profile"],
             consumes = ["application/json"],
             produces = ["application/json"]
