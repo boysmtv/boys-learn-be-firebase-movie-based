@@ -1,6 +1,6 @@
 package boys.mtv.kotlin.movie.service.impl
 
-import boys.mtv.kotlin.movie.entity.Product
+import boys.mtv.kotlin.movie.entity.ProductEntity
 import boys.mtv.kotlin.movie.error.NotFoundException
 import boys.mtv.kotlin.movie.model.ListProductRequest
 import boys.mtv.kotlin.movie.model.ProductRequest
@@ -25,7 +25,7 @@ class ProductServicesImpl(
 
         validationUtil.validate(productRequest)
 
-        val product = Product(
+        val productEntity = ProductEntity(
                 id = productRequest.id!!,
                 name = productRequest.name!!,
                 price = productRequest.price!!,
@@ -34,9 +34,9 @@ class ProductServicesImpl(
                 updated_at = null
         )
 
-        productRepository.save(product)
+        productRepository.save(productEntity)
 
-        return convertResponse(product)
+        return convertResponse(productEntity)
     }
 
     override fun get(id: String): ProductResponse {
@@ -63,11 +63,11 @@ class ProductServicesImpl(
 
     override fun list(listProductRequest: ListProductRequest): List<ProductResponse> {
         val page = productRepository.findAll(PageRequest.of(listProductRequest.page, listProductRequest.size))
-        val product: List<Product> = page.get().collect(Collectors.toList())
-        return product.map { convertResponse(it) }
+        val productEntity: List<ProductEntity> = page.get().collect(Collectors.toList())
+        return productEntity.map { convertResponse(it) }
     }
 
-    private fun findProductByIdOrThrowNotFound(id: String) : Product {
+    private fun findProductByIdOrThrowNotFound(id: String) : ProductEntity {
         val product = productRepository.findByIdOrNull(id)
         if (product == null) {
             throw NotFoundException()
@@ -76,14 +76,14 @@ class ProductServicesImpl(
         }
     }
 
-    private fun convertResponse(product: Product) : ProductResponse {
+    private fun convertResponse(productEntity: ProductEntity) : ProductResponse {
         return ProductResponse(
-                id = product.id,
-                name = product.name,
-                price = product.price,
-                quantity = product.quantity,
-                created_at = product.created_at,
-                updated_at = product.updated_at
+                id = productEntity.id,
+                name = productEntity.name,
+                price = productEntity.price,
+                quantity = productEntity.quantity,
+                created_at = productEntity.created_at,
+                updated_at = productEntity.updated_at
         )
     }
 

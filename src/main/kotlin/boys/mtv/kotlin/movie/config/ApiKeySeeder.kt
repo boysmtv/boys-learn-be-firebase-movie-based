@@ -1,6 +1,6 @@
 package boys.mtv.kotlin.movie.config
 
-import boys.mtv.kotlin.movie.entity.ApiKey
+import boys.mtv.kotlin.movie.entity.ApiKeyEntity
 import boys.mtv.kotlin.movie.repository.ApiKeyRepository
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -13,7 +13,7 @@ class ApiKeySeeder(val apiKeyRepository: ApiKeyRepository) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
         if (!apiKeyRepository.existsById(apiKey)){
-            val entity = ApiKey(id = apiKey)
+            val entity = ApiKeyEntity(id = apiKey)
             apiKeyRepository.save(entity)
         }
     }

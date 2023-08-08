@@ -8,7 +8,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "products")
-data class Product (
+data class ProductEntity (
 
     @Id
     val id: String,

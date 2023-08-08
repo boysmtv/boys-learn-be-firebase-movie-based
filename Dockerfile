@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+    FROM openjdk:8-alpine
 
 MAINTAINER boys.mtv@gmail.com
 

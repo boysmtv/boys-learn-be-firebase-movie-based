@@ -1,9 +1,11 @@
 package boys.mtv.kotlin.movie.service.impl
 
 import boys.mtv.kotlin.movie.common.util.DateUtil
+import boys.mtv.kotlin.movie.common.util.TransactionUtil
 import boys.mtv.kotlin.movie.entity.LoginEntity
 import boys.mtv.kotlin.movie.entity.ProfileEntity
 import boys.mtv.kotlin.movie.error.NotFoundException
+import boys.mtv.kotlin.movie.error.UnauthorizedException
 import boys.mtv.kotlin.movie.model.movie.*
 import boys.mtv.kotlin.movie.repository.LoginRepository
 import boys.mtv.kotlin.movie.repository.ProfileRepository
@@ -25,7 +27,7 @@ class MovieServicesImpl(
         validationUtil.validate(model)
 
         val entity = ProfileEntity(
-                id = DateUtil.generateTransactionID(),
+                id = TransactionUtil.generateTransactionID(),
                 firstName = model.firstName,
                 lastName = model.lastName,
                 phoneNumber = model.phoneNumber,
@@ -39,7 +41,7 @@ class MovieServicesImpl(
 
         return RegisterResponse(
                 id = entity.id,
-                fullName = "${entity.lastName} ${entity.lastName}",
+                fullName = "${entity.firstName} ${entity.lastName}",
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt
         )
@@ -50,19 +52,21 @@ class MovieServicesImpl(
 
         val profile = profileRepository.findUserByEmail(model.email)
         if (profile != null) {
-            val entity = LoginEntity(
-                    id = profile.id,
-                    email = model.email,
-                    password = model.password,
-                    createdAt = Date(),
-            )
-            loginRepository.save(entity)
+            if (profile.password == model.password) {
+                val entity = LoginEntity(
+                        id = TransactionUtil.generateTransactionID(),
+                        idProfile = profile.id,
+                        email = model.email,
+                        createdAt = Date(),
+                )
+                loginRepository.save(entity)
 
-            return LoginResponse(
-                    id = entity.id,
-                    fullName = "${profile.firstName} ${profile.lastName}",
-                    createdAt = profile.createdAt,
-            )
+                return LoginResponse(
+                        id = entity.id,
+                        fullName = "${profile.firstName} ${profile.lastName}",
+                        createdAt = profile.createdAt,
+                )
+            } else throw NotFoundException()
         } else {
             throw NotFoundException()
         }

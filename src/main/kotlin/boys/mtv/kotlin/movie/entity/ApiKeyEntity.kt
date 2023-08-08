@@ -6,7 +6,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "api_keys")
-data class ApiKey (
+data class ApiKeyEntity (
 
     @Id
     val id : String

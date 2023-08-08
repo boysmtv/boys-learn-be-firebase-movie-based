@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 
 interface ProfileRepository : JpaRepository<ProfileEntity, String> {
 
-    @Query("SELECT * FROM profile WHERE email = :email", nativeQuery = true)
+    @Query("SELECT * FROM profile WHERE email = :email ORDER by email DESC LIMIT 1", nativeQuery = true)
     fun findUserByEmail(email: String): ProfileEntity?
 
 }
