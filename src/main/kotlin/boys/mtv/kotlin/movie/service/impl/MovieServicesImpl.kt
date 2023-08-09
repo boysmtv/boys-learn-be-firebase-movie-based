@@ -1,11 +1,9 @@
 package boys.mtv.kotlin.movie.service.impl
 
-import boys.mtv.kotlin.movie.common.util.DateUtil
 import boys.mtv.kotlin.movie.common.util.TransactionUtil
 import boys.mtv.kotlin.movie.entity.LoginEntity
 import boys.mtv.kotlin.movie.entity.ProfileEntity
 import boys.mtv.kotlin.movie.error.NotFoundException
-import boys.mtv.kotlin.movie.error.UnauthorizedException
 import boys.mtv.kotlin.movie.model.movie.*
 import boys.mtv.kotlin.movie.repository.LoginRepository
 import boys.mtv.kotlin.movie.repository.ProfileRepository
@@ -74,8 +72,11 @@ class MovieServicesImpl(
 
     override fun getProfile(model: ProfileRequest): ProfileResponse {
         validationUtil.validate(model)
+
         return buildResponseProfile(
-                findProductByIdOrThrowNotFound(model.id)
+                model = findProductByIdOrThrowNotFound(
+                        id = model.id
+                )
         )
     }
 
@@ -93,10 +94,8 @@ class MovieServicesImpl(
 
     private fun findProductByIdOrThrowNotFound(id: String): ProfileEntity {
         val entity = profileRepository.findByIdOrNull(id)
-        if (entity == null) {
-            throw NotFoundException()
-        } else {
-            return entity
-        }
+        if (entity != null) return entity
+        else throw NotFoundException()
     }
+
 }
