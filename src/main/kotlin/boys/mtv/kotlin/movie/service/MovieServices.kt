@@ -1,10 +1,6 @@
 package boys.mtv.kotlin.movie.service
 
-import boys.mtv.kotlin.movie.model.ListProductRequest
-import boys.mtv.kotlin.movie.model.ProductRequest
-import boys.mtv.kotlin.movie.model.ProductResponse
-import boys.mtv.kotlin.movie.model.UpdateProductRequest
-import boys.mtv.kotlin.movie.model.movie.*
+import boys.mtv.kotlin.movie.model.*
 
 interface MovieServices {
 

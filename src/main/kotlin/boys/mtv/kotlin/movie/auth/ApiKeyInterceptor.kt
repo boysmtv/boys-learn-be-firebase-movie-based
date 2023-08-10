@@ -12,10 +12,7 @@ import java.lang.Exception
 class ApiKeyInterceptor(val apiKeyRepository: ApiKeyRepository) : WebRequestInterceptor {
 
     override fun preHandle(request: WebRequest) {
-        val apiKey = request.getHeader("X-Api-Key")
-        if (apiKey == null) {
-            throw UnauthorizedException()
-        }
+        val apiKey = request.getHeader("X-Api-Key") ?: throw UnauthorizedException()
 
         if (!apiKeyRepository.existsById(apiKey)) {
             throw UnauthorizedException()

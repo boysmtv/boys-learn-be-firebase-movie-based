@@ -1,22 +1,18 @@
-package boys.mtv.kotlin.movie.controller
+package boys.mtv.kotlin.movie.error.handler
 
+import boys.mtv.kotlin.movie.error.ConflictException
 import boys.mtv.kotlin.movie.error.NotFoundException
 import boys.mtv.kotlin.movie.error.UnauthorizedException
 import boys.mtv.kotlin.movie.model.WebResponse
+import com.fasterxml.jackson.core.JsonParseException
 import org.springframework.http.HttpStatus
-import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
-import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import java.util.function.Consumer
 import javax.validation.ConstraintViolationException
 
-
 @RestControllerAdvice
-class ErrorController {
+class ErrorHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = [ConstraintViolationException::class])
@@ -34,7 +30,7 @@ class ErrorController {
         return WebResponse(
                 code = 404,
                 status = "NOT FOUND",
-                data = "No Availbale Data"
+                data = "No Available Data"
         )
     }
 
@@ -44,31 +40,28 @@ class ErrorController {
         return WebResponse(
                 code = 401,
                 status = "UNAUTHORIZED",
-                data = "Please put your X-API-Key"
+                data = "Invalid Credentials"
         )
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationExceptions(
-            ex: MethodArgumentNotValidException): Map<String, String?> {
-        val errors: MutableMap<String, String?> = HashMap()
-        ex.bindingResult.allErrors.forEach(Consumer { error: ObjectError ->
-            val fieldName = (error as FieldError).field
-            val errorMessage = error.getDefaultMessage()
-            errors[fieldName] = errorMessage
-        })
-        return errors
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MissingServletRequestParameterException::class)
-    fun handleMissingParams(ex: MissingServletRequestParameterException): WebResponse<String> {
-        println("${ex.message} parameter is missing")
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(value = [ConflictException::class])
+    fun conflict(notFoundException: ConflictException): WebResponse<String> {
         return WebResponse(
-                code = 401,
-                status = "UNAUTHORIZED",
-                data = ex.message
+                code = 409,
+                status = "Conflict",
+                data = "Data already exists"
         )
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(JsonParseException::class)
+    fun jsonParseException(ex: JsonParseException): WebResponse<String> {
+        return WebResponse(
+                code = 400,
+                status = "BAD REQUEST",
+                data = "Please check your request"
+        )
+    }
+
 }

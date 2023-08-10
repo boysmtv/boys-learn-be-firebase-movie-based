@@ -1,11 +1,12 @@
-package boys.mtv.kotlin.movie.controller.movie
+package boys.mtv.kotlin.movie.controller
 
 import boys.mtv.kotlin.movie.model.*
-import boys.mtv.kotlin.movie.model.movie.*
 import boys.mtv.kotlin.movie.service.MovieServices
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Validated
 class MovieController(val services: MovieServices) {
 
     @PostMapping(

@@ -1,4 +1,4 @@
-package boys.mtv.kotlin.movie.model.movie
+package boys.mtv.kotlin.movie.model
 
 import java.util.*
 import javax.validation.constraints.NotBlank

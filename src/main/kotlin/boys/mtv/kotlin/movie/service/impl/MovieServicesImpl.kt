@@ -3,8 +3,10 @@ package boys.mtv.kotlin.movie.service.impl
 import boys.mtv.kotlin.movie.common.util.TransactionUtil
 import boys.mtv.kotlin.movie.entity.LoginEntity
 import boys.mtv.kotlin.movie.entity.ProfileEntity
+import boys.mtv.kotlin.movie.error.ConflictException
 import boys.mtv.kotlin.movie.error.NotFoundException
-import boys.mtv.kotlin.movie.model.movie.*
+import boys.mtv.kotlin.movie.error.UnauthorizedException
+import boys.mtv.kotlin.movie.model.*
 import boys.mtv.kotlin.movie.repository.LoginRepository
 import boys.mtv.kotlin.movie.repository.ProfileRepository
 import boys.mtv.kotlin.movie.service.MovieServices
@@ -24,25 +26,29 @@ class MovieServicesImpl(
 
         validationUtil.validate(model)
 
-        val entity = ProfileEntity(
-                id = TransactionUtil.generateTransactionID(),
-                firstName = model.firstName,
-                lastName = model.lastName,
-                phoneNumber = model.phoneNumber,
-                email = model.email,
-                password = model.password,
-                createdAt = Date(),
-                updatedAt = null
-        )
+        val profile = profileRepository.findUserByEmail(model.email)
+        if (profile == null) {
+            val entity = ProfileEntity(
+                    id = TransactionUtil.generateTransactionID(),
+                    firstName = model.firstName,
+                    lastName = model.lastName,
+                    phoneNumber = model.phoneNumber,
+                    email = model.email,
+                    password = model.password,
+                    createdAt = Date(),
+                    updatedAt = null
+            )
 
-        profileRepository.save(entity)
+            profileRepository.save(entity)
 
-        return RegisterResponse(
-                id = entity.id,
-                fullName = "${entity.firstName} ${entity.lastName}",
-                createdAt = entity.createdAt,
-                updatedAt = entity.updatedAt
-        )
+            return RegisterResponse(
+                    id = entity.id,
+                    fullName = "${entity.firstName} ${entity.lastName}",
+                    createdAt = entity.createdAt,
+                    updatedAt = entity.updatedAt
+            )
+        } else throw ConflictException()
+
     }
 
     override fun login(model: LoginRequest): LoginResponse {
@@ -64,7 +70,7 @@ class MovieServicesImpl(
                         fullName = "${profile.firstName} ${profile.lastName}",
                         createdAt = profile.createdAt,
                 )
-            } else throw NotFoundException()
+            } else throw UnauthorizedException()
         } else {
             throw NotFoundException()
         }
@@ -74,7 +80,7 @@ class MovieServicesImpl(
         validationUtil.validate(model)
 
         return buildResponseProfile(
-                model = findProductByIdOrThrowNotFound(
+                model = findProfileByIdOrThrowNotFound(
                         id = model.id
                 )
         )
@@ -92,7 +98,7 @@ class MovieServicesImpl(
         )
     }
 
-    private fun findProductByIdOrThrowNotFound(id: String): ProfileEntity {
+    private fun findProfileByIdOrThrowNotFound(id: String): ProfileEntity {
         val entity = profileRepository.findByIdOrNull(id)
         if (entity != null) return entity
         else throw NotFoundException()
