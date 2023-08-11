@@ -4,6 +4,7 @@ services:
   movie-based:
     container_name: "movie-based"
     image: movie-based:0.0.1
+    restart: always
     ports:
       - 8080:8080
     environment:
@@ -15,6 +16,7 @@ services:
   movie-postgres:
     container_name: "movie-postgres"
     image: postgres
+    restart: always
     ports:
       - 5432:5432
     environment:

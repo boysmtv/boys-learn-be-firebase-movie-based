@@ -18,7 +18,7 @@ class MovieController(val services: MovieServices) {
         return WebResponse(
                 code = 200,
                 status = "OK",
-                services.register(body)
+                data = services.register(body)
         )
     }
 
@@ -32,7 +32,7 @@ class MovieController(val services: MovieServices) {
         return WebResponse(
                 code = 200,
                 status = "OK",
-                services.login(body)
+                data = services.login(body)
         )
     }
 
@@ -45,7 +45,7 @@ class MovieController(val services: MovieServices) {
         return WebResponse(
                 code = 200,
                 status = "OK",
-                services.getProfile(body)
+                data = services.getProfile(body)
         )
     }
 
