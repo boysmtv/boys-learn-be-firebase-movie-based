@@ -17,9 +17,13 @@ data class RegisterRequest(
         @NotBlank(message = "The lastName is required.")
         val lastName: String,
 
+        @NotNull(message = "The displayName is required.")
+        @NotBlank(message = "The displayName is required.")
+        val displayName: String,
+
         @NotNull(message = "The phoneNumber is required.")
         @NotBlank(message = "The phoneNumber is required.")
-        val phoneNumber: String,
+        val phone: String,
 
         @Email
         @NotNull(message = "The email is required.")
@@ -30,13 +34,17 @@ data class RegisterRequest(
         @NotBlank(message = "The password is required.")
         @Min(value = 8, message = "The number of password must be greater than 8 digits")
         @Max(value = 32, message = "The number of password must be greater than 32 digits")
-        val password: String
+        val password: String,
 
-)
+        @NotNull(message = "The method is required.")
+        @NotBlank(message = "The method is required.")
+        val method: String,
+
+        )
 
 data class RegisterResponse(
-        val id: String,
-        val fullName: String,
-        val createdAt: Date,
+        val id: String?,
+        val fullName: String?,
+        val createdAt: Date?,
         val updatedAt: Date?
 )

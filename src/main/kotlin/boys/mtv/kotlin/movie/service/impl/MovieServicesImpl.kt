@@ -28,22 +28,25 @@ class MovieServicesImpl(
 
         val profile = profileRepository.findUserByEmail(model.email)
         if (profile == null) {
+            val regDate = Date()
             val entity = ProfileEntity(
                     id = TransactionUtil.generateTransactionID(),
                     firstName = model.firstName,
                     lastName = model.lastName,
-                    phoneNumber = model.phoneNumber,
+                    displayName = model.displayName,
+                    phone = model.phone,
                     email = model.email,
                     password = model.password,
-                    createdAt = Date(),
-                    updatedAt = null
+                    method = model.method,
+                    createdAt = regDate,
+                    updatedAt = regDate
             )
 
             profileRepository.save(entity)
 
             return RegisterResponse(
                     id = entity.id,
-                    fullName = "${entity.firstName} ${entity.lastName}",
+                    fullName = entity.displayName,
                     createdAt = entity.createdAt,
                     updatedAt = entity.updatedAt
             )
@@ -60,13 +63,13 @@ class MovieServicesImpl(
                 val entity = LoginEntity(
                         id = TransactionUtil.generateTransactionID(),
                         idProfile = profile.id,
-                        email = model.email,
+                        email = profile.email,
                         createdAt = Date(),
                 )
                 loginRepository.save(entity)
 
                 return LoginResponse(
-                        id = entity.id,
+                        id = profile.id,
                         fullName = "${profile.firstName} ${profile.lastName}",
                         createdAt = profile.createdAt,
                 )
@@ -91,7 +94,7 @@ class MovieServicesImpl(
                 id = model.id,
                 firstName = model.firstName,
                 lastName = model.lastName,
-                phoneNumber = model.phoneNumber,
+                phoneNumber = model.phone,
                 email = model.email,
                 createdAt = model.createdAt,
                 updatedAt = model.updatedAt

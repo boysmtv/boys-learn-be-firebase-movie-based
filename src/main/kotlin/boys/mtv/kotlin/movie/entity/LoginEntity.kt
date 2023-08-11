@@ -14,12 +14,12 @@ data class LoginEntity(
         val id: String,
 
         @Column(name = "idProfile")
-        var idProfile: String,
+        var idProfile: String?,
 
         @Column(name = "email")
-        var email: String,
+        var email: String?,
 
         @Column(name = "createdAt")
-        var createdAt: Date,
+        var createdAt: Date?,
 
 )

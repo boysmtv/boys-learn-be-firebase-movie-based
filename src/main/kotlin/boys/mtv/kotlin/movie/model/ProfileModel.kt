@@ -18,10 +18,10 @@ data class ProfileRequest(
 
 data class ProfileResponse(
         val id: String,
-        val firstName: String,
-        val lastName: String,
-        val phoneNumber: String,
-        val email: String,
-        val createdAt: Date,
+        val firstName: String?,
+        val lastName: String?,
+        val phoneNumber: String?,
+        val email: String?,
+        val createdAt: Date?,
         val updatedAt: Date?
 )

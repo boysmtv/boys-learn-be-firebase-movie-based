@@ -49,4 +49,17 @@ class MovieController(val services: MovieServices) {
         )
     }
 
+    @PutMapping(
+            value = ["/api/movie/profile"],
+            consumes = ["application/json"],
+            produces = ["application/json"]
+    )
+    fun updateProfile(@RequestBody body: ProfileRequest): WebResponse<ProfileResponse> {
+        return WebResponse(
+                code = 200,
+                status = "OK",
+                data = services.getProfile(body)
+        )
+    }
+
 }

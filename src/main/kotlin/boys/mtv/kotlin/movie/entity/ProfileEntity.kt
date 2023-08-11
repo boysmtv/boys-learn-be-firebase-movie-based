@@ -1,5 +1,6 @@
 package boys.mtv.kotlin.movie.entity
 
+import net.bytebuddy.implementation.bind.annotation.Default
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -13,25 +14,43 @@ data class ProfileEntity(
         @Id
         val id: String,
 
+        @Column(name = "idFireStore")
+        val idFireStore: String? = null,
+
+        @Column(name = "idGoogle")
+        val idGoogle: String? = null,
+
+        @Column(name = "idToken")
+        val idToken: String? = null,
+
         @Column(name = "firstName")
-        var firstName: String,
+        var firstName: String? = null,
 
         @Column(name = "lastName")
-        var lastName: String,
+        var lastName: String? = null,
+
+        @Column(name = "displayName")
+        var displayName: String? = null,
 
         @Column(name = "phoneNumber")
-        var phoneNumber: String,
+        var phone: String? = null,
 
         @Column(name = "email")
-        var email: String,
+        var email: String? = null,
 
         @Column(name = "password")
-        var password: String,
+        var password: String? = null,
+
+        @Column(name = "photoUrl")
+        var photoUrl: String? = null,
+
+        @Column(name = "method")
+        var method: String? = null,
 
         @Column(name = "createdAt")
-        var createdAt: Date,
+        var createdAt: Date? = null,
 
         @Column(name = "updatedAt")
-        var updatedAt: Date?
+        var updatedAt: Date? = null
 
 )

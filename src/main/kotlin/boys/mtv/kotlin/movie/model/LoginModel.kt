@@ -17,7 +17,7 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-        val id: String,
-        val fullName: String,
-        val createdAt: Date
+        val id: String?,
+        val fullName: String?,
+        val createdAt: Date?
 )
